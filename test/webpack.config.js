@@ -1,18 +1,17 @@
+const webpack = require('webpack')
+
 module.exports = {
   entry: "./app.js",
+  mode: 'production',
   cache: false,
   output: {
     path: __dirname,
     filename: "bundle.js"
   },
   module: {
-    loaders: [
-      {test: /\.ejs$/, loader: require.resolve("../") + "?htmlmin"}
+    rules: [
+      {
+        test: /\.ejs$/, loader: require.resolve("../") + "?htmlmin"}
     ]
-  },
-  'ejs-compiled-loader': {
-    'htmlminOptions': {
-      removeComments: true
-    }
   }
 }
