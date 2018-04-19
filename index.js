@@ -9,8 +9,7 @@ var ejs = require('ejs'),
 module.exports = function (source) {
   this.cacheable && this.cacheable();
 
-  var query = typeof this.query === 'object' ? this.query : utils.parseQuery(this.query);
-  var opts = merge(this.options['ejs-compiled-loader'] || {}, query);
+  var opts = utils.getOptions(this) || {};
   opts.client = true;
 
   // Skip compile debug for production when running with
@@ -23,7 +22,9 @@ module.exports = function (source) {
   opts.filename = path.relative(process.cwd(), this.resourcePath);
 
   if (opts.htmlmin) {
-    source = htmlmin.minify(source, opts['htmlminOptions'] || {});
+    source = htmlmin.minify(source, opts['ejs-compiled'] || {
+      removeComments: true  // Always remove comments
+    });
   }
 
   var template = ejs.compile(source, opts);
